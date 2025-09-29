@@ -706,6 +706,20 @@
               <span class="nav-text">AI Tools</span>
               <div class="nav-indicator"></div>
             </a>
+            <a href="#pitch" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span class="nav-text">Pitch Generator</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="#interview" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+              <span class="nav-text">Mock Interview</span>
+              <div class="nav-indicator"></div>
+            </a>
             <a href="#about" class="nav-link group">
               <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -760,30 +774,6 @@
                 <div class="theme-option" data-theme="professional">
                   <div class="theme-preview professional-preview"></div>
                   <span>Professional</span>
-                </div>
-                <div class="theme-option" data-theme="sunset-gradient">
-                  <div class="theme-preview sunset-gradient-preview"></div>
-                  <span>Sunset Gradient</span>
-                </div>
-                <div class="theme-option" data-theme="ocean-gradient">
-                  <div class="theme-preview ocean-gradient-preview"></div>
-                  <span>Ocean Gradient</span>
-                </div>
-                <div class="theme-option" data-theme="purple-gradient">
-                  <div class="theme-preview purple-gradient-preview"></div>
-                  <span>Purple Gradient</span>
-                </div>
-                <div class="theme-option" data-theme="green-gradient">
-                  <div class="theme-preview green-gradient-preview"></div>
-                  <span>Green Gradient</span>
-                </div>
-                <div class="theme-option" data-theme="fire-gradient">
-                  <div class="theme-preview fire-gradient-preview"></div>
-                  <span>Fire Gradient</span>
-                </div>
-                <div class="theme-option" data-theme="cosmic-gradient">
-                  <div class="theme-preview cosmic-gradient-preview"></div>
-                  <span>Cosmic Gradient</span>
                 </div>
               </div>
             </div>
@@ -874,6 +864,24 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
               </a>
+              <a href="#pitch" class="mobile-nav-link">
+                <svg class="mobile-nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span>Pitch Generator</span>
+                <svg class="mobile-nav-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+              <a href="#interview" class="mobile-nav-link">
+                <svg class="mobile-nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                <span>Mock Interview</span>
+                <svg class="mobile-nav-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
               <a href="#about" class="mobile-nav-link">
                 <svg class="mobile-nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -896,6 +904,70 @@
         </div>
       </div>
     </header>
+
+    <!-- Theme Side Panel -->
+    <div class="theme-side-overlay" id="themeSideOverlay"></div>
+    <aside class="theme-side-panel" id="themeSidePanel" aria-hidden="true" role="dialog" aria-label="Theme selector">
+      <div class="theme-side-header">
+        <h3 class="theme-side-title">Choose Theme</h3>
+        <button class="theme-side-close" id="themeSideClose" aria-label="Close">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="theme-side-content">
+        <div class="theme-option" data-theme="dark">
+          <div class="theme-preview dark-preview"></div>
+          <div class="theme-option-meta">
+            <span>Dark</span>
+            <small>Default</small>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="light">
+          <div class="theme-preview light-preview"></div>
+          <div class="theme-option-meta">
+            <span>Light</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="vscode">
+          <div class="theme-preview vscode-preview"></div>
+          <div class="theme-option-meta">
+            <span>VSCode</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="jellyfish">
+          <div class="theme-preview jellyfish-preview"></div>
+          <div class="theme-option-meta">
+            <span>Jellyfish</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="neon">
+          <div class="theme-preview neon-preview"></div>
+          <div class="theme-option-meta">
+            <span>Neon</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="sunset">
+          <div class="theme-preview sunset-preview"></div>
+          <div class="theme-option-meta">
+            <span>Sunset</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="ocean">
+          <div class="theme-preview ocean-preview"></div>
+          <div class="theme-option-meta">
+            <span>Ocean</span>
+          </div>
+        </div>
+        <div class="theme-option" data-theme="professional">
+          <div class="theme-preview professional-preview"></div>
+          <div class="theme-option-meta">
+            <span>Professional</span>
+          </div>
+        </div>
+      </div>
+    </aside>
 
     <!-- HERO -->
       <main id="main" class="max-w-7xl mx-auto px-4">
@@ -951,24 +1023,40 @@
 
             <!-- CTA Buttons -->
             <div class="hero-actions mt-16 flex flex-col sm:flex-row justify-center gap-6 button-reveal">
-              <a href="#ai-tools" class="hero-btn primary">
+              <a href="ai-tools.html" class="hero-btn primary">
                 <span class="btn-content">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                   </svg>
                   Explore AI Tools
                 </span>
+                <div class="btn-glow"></div>
               </a>
-              <a href="#about" class="hero-btn secondary">
+              <a href="pitch-generator.html" class="hero-btn secondary">
                 <span class="btn-content">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                   </svg>
-                  Learn More
+                  Start Creating
                 </span>
               </a>
             </div>
 
+            <!-- Stats Section -->
+            <div class="hero-stats mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-reveal">
+              <div class="stat-item card-reveal">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Ideas Transformed</div>
+              </div>
+              <div class="stat-item card-reveal">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Success Rate</div>
+              </div>
+              <div class="stat-item card-reveal">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Assistant</div>
+              </div>
+            </div>
           </div>
 
           <!-- Scroll Indicator -->
@@ -1002,7 +1090,7 @@
             </div>
             <h3 class="text-xl font-bold mb-3">Pitch Generator</h3>
             <p class="text-gray-300 mb-4">Transform your ideas into compelling pitches with AI-powered content generation and structure optimization.</p>
-            <a href="pitch-generator.html" class="tool-link">Get Started →</a>
+            <a href="#pitch" class="tool-link">Get Started →</a>
           </div>
 
           <!-- Mock Interview Tool -->
@@ -1014,7 +1102,7 @@
             </div>
             <h3 class="text-xl font-bold mb-3">Mock Interview</h3>
             <p class="text-gray-300 mb-4">Practice with AI-powered interview simulations tailored to your industry and experience level.</p>
-            <a href="mock-interview.html" class="tool-link">Start Practice →</a>
+            <a href="#interview" class="tool-link">Start Practice →</a>
           </div>
 
           <!-- Business Analysis Tool -->
@@ -1031,6 +1119,82 @@
         </div>
       </section>
 
+      <!-- PITCH GENERATOR -->
+      <section id="pitch" class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
+            AI Pitch Generator
+          </h2>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Transform your ideas into compelling, professional pitches with our advanced AI technology
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div class="glass p-8 rounded-2xl shadow-xl">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold">Create Your Pitch</h3>
+            </div>
+
+            <label for="ideaInput" class="block text-sm font-medium text-gray-300 mb-3">Describe your business idea or problem statement</label>
+            <textarea id="ideaInput" rows="8" placeholder="Enter your idea, problem statement, or business concept here..." class="w-full p-4 rounded-xl bg-gray-800/50 border border-gray-700 text-white resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"></textarea>
+
+            <div class="mt-6 flex gap-4">
+              <button id="generateBtn" class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <span class="flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                  Generate Pitch
+                </span>
+              </button>
+              <button id="copyPitch" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl font-medium transition-all duration-300 transform hover:scale-105">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div id="pitchOutput" class="mt-8 bg-gray-900/50 border border-gray-700 p-6 rounded-xl text-gray-200 min-h-[200px]"></div>
+          </div>
+
+          <div class="glass p-8 rounded-2xl shadow-xl">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold">Mock Interview</h3>
+            </div>
+            
+            <div id="chatBox" class="h-80 overflow-y-auto bg-gray-800/50 border border-gray-700 p-4 rounded-xl mb-6 space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                  </svg>
+                </div>
+                <p class="text-gray-300 italic">AI: Welcome! I'm here to help you practice your interview skills. Let's begin with a simple question - tell me about yourself.</p>
+              </div>
+            </div>
+            
+            <div class="flex gap-3">
+              <input id="userInput" type="text" placeholder="Type your response here..." class="flex-1 p-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+              <button id="sendBtn" class="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl font-bold hover:from-green-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- ABOUT -->
       <section id="about" class="py-20">
@@ -1122,6 +1286,8 @@
             <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
             <ul class="space-y-3">
               <li><a href="#ai-tools" class="text-gray-300 hover:text-white transition-colors">AI Tools</a></li>
+              <li><a href="#pitch" class="text-gray-300 hover:text-white transition-colors">Pitch Generator</a></li>
+              <li><a href="#interview" class="text-gray-300 hover:text-white transition-colors">Mock Interview</a></li>
               <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
             </ul>
           </div>
@@ -1140,6 +1306,7 @@
         
         <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p class="text-gray-400 text-sm">
+            © 2024 IdeaForge. All rights reserved. Built with modern web technologies.
           </p>
           <div class="flex items-center gap-4 mt-4 md:mt-0">
             <span class="text-gray-400 text-sm">Powered by</span>

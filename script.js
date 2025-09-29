@@ -92,19 +92,27 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
       });
 
       output.innerHTML = `
-        <h4 class="text-xl font-bold mb-2 text-green-400">✨ Your AI Generated Pitch:</h4>
-        <div class="space-y-3">
+        <h4 class="text-xl font-bold mb-3 text-green-400">🔥 Hackathon Pitch (3–4 min) — eLearning & Communication Theme</h4>
+        <div class="space-y-5 text-gray-200">
+          <hr class="border-white/10" />
           <div>
-            <h5 class="font-semibold text-indigo-300">Problem Statement:</h5>
-            <p class="text-gray-200">${response.refinedIdea.problemStatement || 'AI-generated problem statement'}</p>
+            <h5 class="font-semibold text-indigo-300 mb-2">1️⃣ Hook (10–15 sec)</h5>
+            <p>“Imagine being a student with great ideas but struggling to communicate them clearly — whether it’s for class presentations, startup pitches, or competitions.<br/>
+            Our platform helps students express their creativity and ideas confidently, every single time.”</p>
           </div>
+          <hr class="border-white/10" />
           <div>
-            <h5 class="font-semibold text-indigo-300">Solution:</h5>
-            <p class="text-gray-200">${response.refinedIdea.solution || 'AI-generated solution'}</p>
+            <h5 class="font-semibold text-indigo-300 mb-2">2️⃣ Problem (30 sec)</h5>
+            <p>“Students today face 2 major challenges in learning & communication:</p>
+            <p>1. Ideas → Creativity exists, but students struggle to structure thoughts into strong presentations or scripts.</p>
+            <p>2. Interviews → No realistic practice, so confidence drops when presenting or speaking in front of others.</p>
+            <p>We want to bridge this gap with one connected platform.”</p>
           </div>
+          <hr class="border-white/10" />
           <div>
-            <h5 class="font-semibold text-indigo-300">Value Proposition:</h5>
-            <p class="text-gray-200">${response.refinedIdea.valueProposition || 'AI-generated value proposition'}</p>
+            <h5 class="font-semibold text-indigo-300 mb-2">3️⃣ Solution (1 min)</h5>
+            <p>“Our solution is an AI-powered communication toolkit, with 2 main tools:</p>
+            <p>1️⃣ AI Idea Refiner → Turns messy notes or rough ideas into clear, persuasive pitch scripts, slide drafts, and one-page summaries. Instant AI feedback on clarity, persuasiveness and structure.”</p>
           </div>
         </div>
       `;
@@ -403,7 +411,16 @@ const themes = {
   'purple-gradient': { name: 'Purple Gradient', color: '#8b5cf6' },
   'green-gradient': { name: 'Green Gradient', color: '#10b981' },
   'fire-gradient': { name: 'Fire Gradient', color: '#ef4444' },
-  'cosmic-gradient': { name: 'Cosmic Gradient', color: '#6366f1' }
+  'cosmic-gradient': { name: 'Cosmic Gradient', color: '#6366f1' },
+  aurora: { name: 'Aurora', color: '#00d4aa' },
+  midnight: { name: 'Midnight', color: '#6366f1' },
+  forest: { name: 'Forest', color: '#4caf50' },
+  'rose-gold': { name: 'Rose Gold', color: '#e91e63' },
+  cyberpunk: { name: 'Cyberpunk', color: '#ff0080' },
+  lavender: { name: 'Lavender', color: '#a855f7' },
+  emerald: { name: 'Emerald', color: '#10b981' },
+  coral: { name: 'Coral', color: '#ff6b6b' },
+  steel: { name: 'Steel', color: '#6b7280' }
 };
 
 let currentTheme = 'dark';
@@ -413,7 +430,12 @@ function initializeThemeSelector() {
   const themeDropdown = document.getElementById('themeDropdown');
   const themeName = themeSelector?.querySelector('.theme-name');
   
-  if (!themeSelector || !themeDropdown || !themeName) return;
+  if (!themeSelector || !themeDropdown || !themeName) {
+    console.error('Theme elements not found:', { themeSelector, themeDropdown, themeName });
+    return;
+  }
+  
+  console.log('Theme selector initialized successfully');
   
   // Check for saved theme preference or default to dark
   const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -425,9 +447,18 @@ function initializeThemeSelector() {
   // Toggle dropdown
   themeSelector.addEventListener('click', (e) => {
     e.stopPropagation();
+    console.log('Theme selector clicked');
     themeDropdown.classList.toggle('show');
     themeSelector.classList.toggle('active');
+    console.log('Dropdown classes:', themeDropdown.classList.toString());
   });
+  
+  // Test: Make dropdown visible for debugging
+  setTimeout(() => {
+    console.log('Making dropdown visible for testing');
+    themeDropdown.classList.add('show');
+    themeSelector.classList.add('active');
+  }, 2000);
   
   // Handle theme selection
   themeDropdown.addEventListener('click', (e) => {

@@ -1,6 +1,12 @@
 // API Configuration
 const API_BASE_URL = 'http://localhost:5000/api';
 let authToken = localStorage.getItem('authToken');
+const DEMO_USER = {
+  email: 'demo@ideaforge.dev',
+  password: 'demo123',
+  name: 'Demo User',
+  token: 'demo-token'
+};
 
 // API Helper Functions
 async function apiRequest(endpoint, options = {}) {
@@ -92,27 +98,19 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
       });
 
       output.innerHTML = `
-        <h4 class="text-xl font-bold mb-3 text-green-400">🔥 Hackathon Pitch (3–4 min) — eLearning & Communication Theme</h4>
-        <div class="space-y-5 text-gray-200">
-          <hr class="border-white/10" />
+        <h4 class="text-xl font-bold mb-2 text-green-400">✨ Your AI Generated Pitch:</h4>
+        <div class="space-y-3">
           <div>
-            <h5 class="font-semibold text-indigo-300 mb-2">1️⃣ Hook (10–15 sec)</h5>
-            <p>“Imagine being a student with great ideas but struggling to communicate them clearly — whether it’s for class presentations, startup pitches, or competitions.<br/>
-            Our platform helps students express their creativity and ideas confidently, every single time.”</p>
+            <h5 class="font-semibold text-indigo-300">Problem Statement:</h5>
+            <p class="text-gray-200">${response.refinedIdea.problemStatement || 'AI-generated problem statement'}</p>
           </div>
-          <hr class="border-white/10" />
           <div>
-            <h5 class="font-semibold text-indigo-300 mb-2">2️⃣ Problem (30 sec)</h5>
-            <p>“Students today face 2 major challenges in learning & communication:</p>
-            <p>1. Ideas → Creativity exists, but students struggle to structure thoughts into strong presentations or scripts.</p>
-            <p>2. Interviews → No realistic practice, so confidence drops when presenting or speaking in front of others.</p>
-            <p>We want to bridge this gap with one connected platform.”</p>
+            <h5 class="font-semibold text-indigo-300">Solution:</h5>
+            <p class="text-gray-200">${response.refinedIdea.solution || 'AI-generated solution'}</p>
           </div>
-          <hr class="border-white/10" />
           <div>
-            <h5 class="font-semibold text-indigo-300 mb-2">3️⃣ Solution (1 min)</h5>
-            <p>“Our solution is an AI-powered communication toolkit, with 2 main tools:</p>
-            <p>1️⃣ AI Idea Refiner → Turns messy notes or rough ideas into clear, persuasive pitch scripts, slide drafts, and one-page summaries. Instant AI feedback on clarity, persuasiveness and structure.”</p>
+            <h5 class="font-semibold text-indigo-300">Value Proposition:</h5>
+            <p class="text-gray-200">${response.refinedIdea.valueProposition || 'AI-generated value proposition'}</p>
           </div>
         </div>
       `;
@@ -275,6 +273,20 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const errorDiv = document.getElementById("loginError");
   
   try {
+    // Demo auth: bypass API if demo creds match
+    if (email === DEMO_USER.email && password === DEMO_USER.password) {
+      authToken = DEMO_USER.token;
+      localStorage.setItem('authToken', authToken);
+      localStorage.setItem('userName', DEMO_USER.name);
+      localStorage.setItem('userEmail', DEMO_USER.email);
+      document.getElementById("loginModal").classList.add("hidden");
+      document.getElementById("loginForm").reset();
+      errorDiv.classList.add("hidden");
+      updateAuthUI();
+      alert("Logged in with demo account!\nEmail: " + DEMO_USER.email + "\nPassword: " + DEMO_USER.password);
+      return;
+    }
+
     await login(email, password);
     document.getElementById("loginModal").classList.add("hidden");
     document.getElementById("loginForm").reset();
@@ -314,15 +326,23 @@ function updateAuthUI() {
   const loginBtn = document.getElementById("loginBtn");
   const registerBtn = document.getElementById("registerBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const profileNameEl = document.querySelector('.profile-name');
+  const profileEmailEl = document.querySelector('.profile-email');
+  const storedName = localStorage.getItem('userName');
+  const storedEmail = localStorage.getItem('userEmail');
   
   if (authToken) {
     loginBtn.classList.add("hidden");
     registerBtn.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
+    if (profileNameEl && storedName) profileNameEl.textContent = storedName;
+    if (profileEmailEl && storedEmail) profileEmailEl.textContent = storedEmail;
   } else {
     loginBtn.classList.remove("hidden");
     registerBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
+    if (profileNameEl) profileNameEl.textContent = 'User Name';
+    if (profileEmailEl) profileEmailEl.textContent = 'user@example.com';
   }
 }
 
@@ -405,22 +425,7 @@ const themes = {
   neon: { name: 'Neon', color: '#00ff00' },
   sunset: { name: 'Sunset', color: '#ff6b35' },
   ocean: { name: 'Ocean', color: '#00bfff' },
-  professional: { name: 'Professional', color: '#3182ce' },
-  'sunset-gradient': { name: 'Sunset Gradient', color: '#ff6b35' },
-  'ocean-gradient': { name: 'Ocean Gradient', color: '#00bfff' },
-  'purple-gradient': { name: 'Purple Gradient', color: '#8b5cf6' },
-  'green-gradient': { name: 'Green Gradient', color: '#10b981' },
-  'fire-gradient': { name: 'Fire Gradient', color: '#ef4444' },
-  'cosmic-gradient': { name: 'Cosmic Gradient', color: '#6366f1' },
-  aurora: { name: 'Aurora', color: '#00d4aa' },
-  midnight: { name: 'Midnight', color: '#6366f1' },
-  forest: { name: 'Forest', color: '#4caf50' },
-  'rose-gold': { name: 'Rose Gold', color: '#e91e63' },
-  cyberpunk: { name: 'Cyberpunk', color: '#ff0080' },
-  lavender: { name: 'Lavender', color: '#a855f7' },
-  emerald: { name: 'Emerald', color: '#10b981' },
-  coral: { name: 'Coral', color: '#ff6b6b' },
-  steel: { name: 'Steel', color: '#6b7280' }
+  professional: { name: 'Professional', color: '#3182ce' }
 };
 
 let currentTheme = 'dark';
@@ -428,14 +433,12 @@ let currentTheme = 'dark';
 function initializeThemeSelector() {
   const themeSelector = document.getElementById('themeSelector');
   const themeDropdown = document.getElementById('themeDropdown');
+  const themeSidePanel = document.getElementById('themeSidePanel');
+  const themeSideOverlay = document.getElementById('themeSideOverlay');
+  const themeSideClose = document.getElementById('themeSideClose');
   const themeName = themeSelector?.querySelector('.theme-name');
   
-  if (!themeSelector || !themeDropdown || !themeName) {
-    console.error('Theme elements not found:', { themeSelector, themeDropdown, themeName });
-    return;
-  }
-  
-  console.log('Theme selector initialized successfully');
+  if (!themeSelector || !themeDropdown || !themeName) return;
   
   // Check for saved theme preference or default to dark
   const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -444,23 +447,20 @@ function initializeThemeSelector() {
   applyTheme(currentTheme);
   updateThemeSelector();
   
-  // Toggle dropdown
+  // Open side panel instead of inline dropdown
   themeSelector.addEventListener('click', (e) => {
     e.stopPropagation();
-    console.log('Theme selector clicked');
-    themeDropdown.classList.toggle('show');
-    themeSelector.classList.toggle('active');
-    console.log('Dropdown classes:', themeDropdown.classList.toString());
+    // hide inline dropdown if visible
+    themeDropdown.classList.remove('show');
+    themeSelector.classList.add('active');
+    // show side panel + overlay
+    themeSidePanel?.classList.add('show');
+    themeSideOverlay?.classList.add('show');
+    // prevent body scroll
+    document.body.style.overflow = 'hidden';
   });
   
-  // Test: Make dropdown visible for debugging
-  setTimeout(() => {
-    console.log('Making dropdown visible for testing');
-    themeDropdown.classList.add('show');
-    themeSelector.classList.add('active');
-  }, 2000);
-  
-  // Handle theme selection
+  // Handle theme selection (inline dropdown fallback)
   themeDropdown.addEventListener('click', (e) => {
     const themeOption = e.target.closest('.theme-option');
     if (themeOption) {
@@ -482,8 +482,35 @@ function initializeThemeSelector() {
     }, 150);
     }
   });
+
+  // Handle theme selection inside side panel
+  themeSidePanel?.addEventListener('click', (e) => {
+    const themeOption = e.target.closest('.theme-option');
+    if (themeOption) {
+      const selectedTheme = themeOption.dataset.theme;
+      currentTheme = selectedTheme;
+      applyTheme(selectedTheme);
+      updateThemeSelector();
+      localStorage.setItem('theme', selectedTheme);
+      closeThemeSidePanel();
+    }
+  });
+
+  function closeThemeSidePanel() {
+    themeSidePanel?.classList.remove('show');
+    themeSideOverlay?.classList.remove('show');
+    themeSelector.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close handlers for side panel
+  themeSideClose?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeThemeSidePanel();
+  });
+  themeSideOverlay?.addEventListener('click', () => closeThemeSidePanel());
   
-  // Close dropdown when clicking outside
+  // Close inline dropdown when clicking outside (fallback)
   document.addEventListener('click', (e) => {
     if (!themeSelector.contains(e.target) && !themeDropdown.contains(e.target)) {
       themeDropdown.classList.remove('show');

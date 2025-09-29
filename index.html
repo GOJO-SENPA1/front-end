@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IdeaForge — Professional AI Innovation Platform</title>
+    <meta name="description" content="Transform your ideas into reality with our professional AI-powered tools for pitch generation, mock interviews, and business development." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+    body,html{
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }    
+    #pageLoader{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 1.5s ease, visibility 1.5s ease;
+      overflow: hidden;
+    }
+    #main{
+      display: none;
+    }
+    video{
+      max-width: 100%;
+      max-height: 100%;
+      
+    }
+    
+    /* Gate Animation Styles */
+    .gate-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .gate-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    
+    /* Webpage Tearing Effect */
+    .webpage-tear {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    .tear-left, .tear-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(45deg, 
+        rgba(0, 0, 0, 0.9) 0%, 
+        rgba(0, 0, 0, 0.7) 30%, 
+        rgba(0, 0, 0, 0.5) 60%, 
+        transparent 100%);
+      transform-origin: center;
+      transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .tear-left {
+      left: 0;
+      transform-origin: left center;
+    }
+    
+    .tear-right {
+      right: 0;
+      transform-origin: right center;
+    }
+    
+    .tear-edge {
+      position: absolute;
+      top: 0;
+      width: 20px;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        rgba(255, 255, 255, 0.1) 100%);
+      animation: tearShimmer 2s ease-in-out infinite;
+    }
+    
+    .left-tear {
+      right: 0;
+    }
+    
+    .right-tear {
+      left: 0;
+    }
+    
+    .gate-doors {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      display: flex;
+      perspective: 1000px;
+    }
+    
+    .gate-door {
+      width: 50%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+    }
+    
+    .left-door {
+      transform-origin: left center;
+    }
+    
+    .right-door {
+      transform-origin: right center;
+    }
+    
+    .door-panel {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 50%, #0d0d0d 100%);
+      border: 3px solid #444;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .door-panel::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      border: 2px solid #666;
+      border-radius: 4px;
+      background: linear-gradient(45deg, #333 0%, #222 50%, #333 100%);
+    }
+    
+    .door-handle {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      width: 20px;
+      height: 20px;
+      background: #888;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .gate-text-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 1s ease 0.5s;
+    }
+    
+    /* Lightning Effects */
+    .lightning-effect {
+      position: absolute;
+      top: -50px;
+      left: -100px;
+      right: -100px;
+      bottom: -50px;
+      z-index: -1;
+    }
+    
+    .lightning-bolt {
+      position: absolute;
+      background: linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.9) 0%, 
+        rgba(59, 130, 246, 0.8) 30%, 
+        rgba(139, 92, 246, 0.6) 70%, 
+        rgba(255, 255, 255, 0.9) 100%);
+      opacity: 0;
+      animation: lightningStrike 0.8s ease-in-out infinite alternate;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+    
+    .bolt-1 {
+      top: 20%;
+      left: 10%;
+      width: 3px;
+      height: 60px;
+      transform: rotate(15deg);
+      animation-delay: 0s;
+    }
+    
+    .bolt-2 {
+      top: 30%;
+      right: 15%;
+      width: 2px;
+      height: 80px;
+      transform: rotate(-20deg);
+      animation-delay: 0.2s;
+    }
+    
+    .bolt-3 {
+      bottom: 40%;
+      left: 20%;
+      width: 2.5px;
+      height: 50px;
+      transform: rotate(30deg);
+      animation-delay: 0.4s;
+    }
+    
+    .bolt-4 {
+      bottom: 30%;
+      right: 25%;
+      width: 3px;
+      height: 70px;
+      transform: rotate(-15deg);
+      animation-delay: 0.6s;
+    }
+    
+    /* Bottom Text */
+    .gate-bottom-text {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 8;
+      opacity: 0;
+      transition: opacity 1s ease 2s;
+    }
+    
+    .bottom-text-line {
+      color: #ccc;
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 2.5s both;
+    }
+    
+    .bottom-text-line:nth-child(2) {
+      animation-delay: 3s;
+    }
+    
+    .gate-text-main {
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+      margin-bottom: 1rem;
+      animation: textGlow 3s ease-in-out infinite alternate;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid #3b82f6;
+      animation: typewriter 3s steps(9, end) 0.5s both, textGlow 3s ease-in-out infinite alternate 3.5s;
+    }
+    
+    /* Typewriter Animation */
+    @keyframes typewriter {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+    
+    /* Typewriter Cursor Blink */
+    @keyframes cursorBlink {
+      0%, 50% { border-color: #3b82f6; }
+      51%, 100% { border-color: transparent; }
+    }
+    
+    .gate-text-main::after {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: #3b82f6;
+      animation: cursorBlink 1s infinite;
+    }
+    
+    /* Text Explosion Effect */
+    .gate-text-main.exploding {
+      animation: textExplosion 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    @keyframes textExplosion {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.3) rotate(2deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(0.8) rotate(-1deg);
+        opacity: 0;
+      }
+    }
+    
+    .gate-text-subtitle {
+      font-size: 1.5rem;
+      color: #ccc;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.5s both;
+    }
+    
+    .gate-text-decoration {
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+      margin: 0 auto;
+      border-radius: 2px;
+      opacity: 0;
+      animation: expandWidth 1s ease 2s both;
+    }
+    
+    .gate-opening-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 70%);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    
+    /* Gate Animation States */
+    .gate-container.show {
+      display: flex;
+    }
+    
+    .gate-container.show .gate-background {
+      opacity: 1;
+    }
+    
+    .gate-container.show .gate-text-container {
+      opacity: 1;
+    }
+    
+    .gate-container.show .gate-bottom-text {
+      opacity: 1;
+    }
+    
+    .gate-container.opening .left-door {
+      transform: rotateY(-90deg);
+    }
+    
+    .gate-container.opening .right-door {
+      transform: rotateY(90deg);
+    }
+    
+    .gate-container.opening .tear-left {
+      transform: rotateY(-90deg) translateX(-20px);
+    }
+    
+    .gate-container.opening .tear-right {
+      transform: rotateY(90deg) translateX(20px);
+    }
+    
+    .gate-container.opening .gate-opening-effect {
+      opacity: 1;
+    }
+    
+    .gate-container.opening .lightning-bolt {
+      opacity: 1;
+    }
+    
+    /* Keyframe Animations */
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+      100% { text-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.4); }
+    }
+    
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes expandWidth {
+      0% { width: 0; }
+      100% { width: 100px; }
+    }
+    
+    @keyframes gateOpen {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(-90deg);
+      }
+    }
+    
+    @keyframes gateOpenRight {
+      0% {
+        transform: rotateY(0deg);
+      }
+      100% {
+        transform: rotateY(90deg);
+      }
+    }
+    
+    @keyframes tearShimmer {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+    
+    @keyframes lightningStrike {
+      0% { 
+        opacity: 0;
+        transform: scaleY(0.5);
+      }
+      50% { 
+        opacity: 1;
+        transform: scaleY(1.2);
+      }
+      100% { 
+        opacity: 0.8;
+        transform: scaleY(1);
+      }
+    }
+    
+    @keyframes webpageTear {
+      0% {
+        transform: translateX(0) rotateY(0deg);
+      }
+      100% {
+        transform: translateX(-50px) rotateY(-90deg);
+      }
+    }
+    
+    @keyframes webpageTearRight {
+      0% {
+        transform: translateX(0) rotateY(0deg);
+      }
+      100% {
+        transform: translateX(50px) rotateY(90deg);
+      }
+    }
+    
+    /* Intro Sequence Animations */
+    .intro-fade-in {
+      animation: introFadeIn 1s ease-out forwards;
+    }
+    
+    .fangs-glow {
+      animation: fangsGlow 2s ease-in-out infinite alternate;
+    }
+    
+    .fangs-scale {
+      animation: fangsScale 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .destruction-shatter {
+      animation: destructionShatter 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+      border-radius: 50%;
+      animation: particleFloat 3s ease-out forwards;
+    }
+    
+    @keyframes introFadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes fangsGlow {
+      0% {
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        filter: brightness(1);
+      }
+      100% {
+        text-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.6);
+        filter: brightness(1.2);
+      }
+    }
+    
+    @keyframes fangsScale {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes destructionShatter {
+      0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      25% {
+        transform: scale(1.1) rotate(2deg);
+        opacity: 0.9;
+      }
+      50% {
+        transform: scale(0.9) rotate(-1deg);
+        opacity: 0.7;
+      }
+      75% {
+        transform: scale(0.7) rotate(1deg);
+        opacity: 0.4;
+      }
+      100% {
+        transform: scale(0.3) rotate(3deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Prevent scroll during intro */
+    body.intro-active {
+      overflow: hidden;
+    }
+    </style>
+  </head>
+  <body class="bg-gradient-to-b from-gray-950 to-gray-900 text-white antialiased loading">
+   <!-- Intro Video Sequence -->
+    <div id="introSequence" class="fixed inset-0 z-50">
+      <!-- Fullscreen Video -->
+      <div id="videoContainer" class="absolute inset-0">
+        <video id="introVideo" autoplay muted playsinline class="w-full h-full object-cover">
+          <source src="lv_0_20250929014937.mp4" type="video/mp4">
+        </video>
+        <!-- Skip button -->
+        <button id="skipIntro" class="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg hover:bg-opacity-70 transition-all duration-300 z-10">
+          Skip Intro
+        </button>
+      </div>
+      
+      <!-- Fangs Text Overlay -->
+      <div id="fangsOverlay" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90 hidden">
+        <div class="text-center">
+          <h1 id="fangsText" class="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-pulse">
+            FANGS
+          </h1>
+          <div class="mt-4 text-xl text-gray-300 font-light">
+            Where Innovation Meets Excellence
+          </div>
+        </div>
+      </div>
+      
+      <!-- Destruction Animation -->
+      <div id="destructionContainer" class="absolute inset-0 hidden">
+        <div id="shatterOverlay" class="absolute inset-0 bg-black"></div>
+        <div id="particlesContainer" class="absolute inset-0"></div>
+      </div>
+    </div>
+
+<!-- Animated Gate -->
+<div id="gateContainer" class="gate-container hidden">
+  <!-- Black Background -->
+  <div class="gate-background"></div>
+  
+  <!-- Webpage Tearing Effect -->
+  <div class="webpage-tear">
+    <div class="tear-left"></div>
+    <div class="tear-right"></div>
+  </div>
+  
+  <!-- Gate Doors with Tearing -->
+  <div class="gate-doors">
+    <div class="gate-door left-door">
+      <div class="door-panel">
+        <div class="tear-edge left-tear"></div>
+      </div>
+      <div class="door-handle"></div>
+    </div>
+    <div class="gate-door right-door">
+      <div class="door-panel">
+        <div class="tear-edge right-tear"></div>
+      </div>
+      <div class="door-handle"></div>
+    </div>
+  </div>
+  
+  <!-- Gate Text with Lightning -->
+  <div class="gate-text-container">
+    <div class="lightning-effect">
+      <div class="lightning-bolt bolt-1"></div>
+      <div class="lightning-bolt bolt-2"></div>
+      <div class="lightning-bolt bolt-3"></div>
+      <div class="lightning-bolt bolt-4"></div>
+    </div>
+    <div class="gate-text-main">IdeaForge</div>
+    <div class="gate-text-subtitle">Where Ideas Come to Life</div>
+    <div class="gate-text-decoration"></div>
+  </div>
+  
+  <!-- Gate Opening Effect -->
+  <div class="gate-opening-effect"></div>
+  
+  <!-- Text Below Gate -->
+  <div class="gate-bottom-text">
+    <div class="bottom-text-line">Welcome to the Future of Innovation</div>
+    <div class="bottom-text-line">Transform Your Ideas into Reality</div>
+  </div>
+</div>
+
+
+
+    <!-- NEXT LEVEL NAVBAR -->
+    <header class="sticky top-0 z-50 navbar-container navbar-reveal">
+      <div class="navbar-glass">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
+          
+          <!-- Logo Section with Animation -->
+          <a href="#" class="flex items-center gap-3 group logo-container">
+            <div class="logo-icon">
+              <div class="logo-inner">
+                <span class="logo-text">IF</span>
+                <div class="logo-glow"></div>
+              </div>
+            </div>
+            <span class="logo-text-main">IdeaForge</span>
+            <div class="logo-underline"></div>
+          </a>
+
+          <!-- Search Bar -->
+          <div class="hidden lg:flex flex-1 max-w-md mx-8">
+            <div class="search-container">
+              <div class="search-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <input type="text" id="searchInput" placeholder="Search features, help..." class="search-input">
+              <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+          </div>
+
+          <!-- Desktop Navigation -->
+          <nav class="hidden md:flex items-center gap-1">
+            <a href="#ai-tools" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <span class="nav-text">AI Tools</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="#about" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span class="nav-text">About</span>
+              <div class="nav-indicator"></div>
+            </a>
+          </nav>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-2">
+            <!-- Theme Selector Dropdown -->
+            <div class="theme-selector-container">
+              <button id="themeSelector" class="theme-selector" title="Select theme">
+                <svg class="theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+              </svg>
+                <span class="theme-name">Dark</span>
+                <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+              <div class="theme-dropdown" id="themeDropdown">
+                <div class="theme-option" data-theme="dark">
+                  <div class="theme-preview dark-preview"></div>
+                  <span>Dark</span>
+                </div>
+                <div class="theme-option" data-theme="light">
+                  <div class="theme-preview light-preview"></div>
+                  <span>Light</span>
+                </div>
+                <div class="theme-option" data-theme="vscode">
+                  <div class="theme-preview vscode-preview"></div>
+                  <span>VSCode</span>
+                </div>
+                <div class="theme-option" data-theme="jellyfish">
+                  <div class="theme-preview jellyfish-preview"></div>
+                  <span>Jellyfish</span>
+                </div>
+                <div class="theme-option" data-theme="neon">
+                  <div class="theme-preview neon-preview"></div>
+                  <span>Neon</span>
+                </div>
+                <div class="theme-option" data-theme="sunset">
+                  <div class="theme-preview sunset-preview"></div>
+                  <span>Sunset</span>
+                </div>
+                <div class="theme-option" data-theme="ocean">
+                  <div class="theme-preview ocean-preview"></div>
+                  <span>Ocean</span>
+                </div>
+                <div class="theme-option" data-theme="professional">
+                  <div class="theme-preview professional-preview"></div>
+                  <span>Professional</span>
+                </div>
+                <div class="theme-option" data-theme="sunset-gradient">
+                  <div class="theme-preview sunset-gradient-preview"></div>
+                  <span>Sunset Gradient</span>
+                </div>
+                <div class="theme-option" data-theme="ocean-gradient">
+                  <div class="theme-preview ocean-gradient-preview"></div>
+                  <span>Ocean Gradient</span>
+                </div>
+                <div class="theme-option" data-theme="purple-gradient">
+                  <div class="theme-preview purple-gradient-preview"></div>
+                  <span>Purple Gradient</span>
+                </div>
+                <div class="theme-option" data-theme="green-gradient">
+                  <div class="theme-preview green-gradient-preview"></div>
+                  <span>Green Gradient</span>
+                </div>
+                <div class="theme-option" data-theme="fire-gradient">
+                  <div class="theme-preview fire-gradient-preview"></div>
+                  <span>Fire Gradient</span>
+                </div>
+                <div class="theme-option" data-theme="cosmic-gradient">
+                  <div class="theme-preview cosmic-gradient-preview"></div>
+                  <span>Cosmic Gradient</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications -->
+            <button class="notification-btn" title="Notifications">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.5 19.5L9 15H4l5 5-4.5-4.5z"></path>
+              </svg>
+              <span class="notification-badge">3</span>
+            </button>
+
+            <!-- User Profile Dropdown -->
+            <div class="relative" id="userDropdown">
+              <button class="profile-btn" id="profileToggle">
+                <div class="profile-avatar">
+                  <span class="profile-initial">U</span>
+                </div>
+                <svg class="profile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="profile-dropdown" id="profileMenu">
+                <div class="profile-header">
+                  <div class="profile-info">
+                    <div class="profile-name">User Name</div>
+                    <div class="profile-email">user@example.com</div>
+                  </div>
+                </div>
+                <div class="profile-divider"></div>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">👤</span>
+                  <span>Profile</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">⚙️</span>
+                  <span>Settings</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">📊</span>
+                  <span>Analytics</span>
+                </a>
+                <div class="profile-divider"></div>
+                <button id="logoutBtn" class="profile-item logout-item hidden">
+                  <span class="profile-item-icon">🚪</span>
+                  <span>Logout</span>
+                </button>
+                <button id="loginBtn" class="profile-item login-item">
+                  <span class="profile-item-icon">🔑</span>
+                  <span>Login</span>
+                </button>
+                <button id="registerBtn" class="profile-item register-item">
+                  <span class="profile-item-icon">📝</span>
+                  <span>Register</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle md:hidden" id="mobileMenuToggle">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+          <div class="mobile-menu-content">
+            <div class="mobile-search">
+              <div class="search-container">
+                <div class="search-icon">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <input type="text" placeholder="Search..." class="search-input">
+              </div>
+            </div>
+            <nav class="mobile-nav">
+              <a href="#ai-tools" class="mobile-nav-link">
+                <svg class="mobile-nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+                <span>AI Tools</span>
+                <svg class="mobile-nav-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+              <a href="#about" class="mobile-nav-link">
+                <svg class="mobile-nav-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>About Us</span>
+                <svg class="mobile-nav-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </nav>
+            <div class="mobile-actions">
+              <button id="mobileLoginBtn" class="mobile-action-btn primary">
+                <span>Login</span>
+              </button>
+              <button id="mobileRegisterBtn" class="mobile-action-btn secondary">
+                <span>Register</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+      <main id="main" class="max-w-7xl mx-auto px-4">
+        <section class="min-h-screen flex items-center justify-center text-center relative overflow-hidden hero-reveal">
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0 overflow-hidden">
+            <div class="floating-shape shape-1 shape-reveal"></div>
+            <div class="floating-shape shape-2 shape-reveal"></div>
+            <div class="floating-shape shape-3 shape-reveal"></div>
+            <div class="floating-shape shape-4 shape-reveal"></div>
+            <div class="floating-shape shape-5 shape-reveal"></div>
+            <div class="particle-field shape-reveal"></div>
+          </div>
+          
+          <div class="relative z-10 max-w-5xl mx-auto">
+            <!-- Main Heading with Animation -->
+            <div class="hero-text-container text-reveal">
+              <h1 class="hero-title text-6xl md:text-8xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-gradient">
+                Forge Your Ideas
+                <span class="block text-5xl md:text-7xl mt-2">Into Reality</span>
+              </h1>
+              
+              <!-- Subtitle with typing effect -->
+              <p class="hero-subtitle mt-8 text-2xl md:text-3xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                Professional AI-powered platform for 
+                <span class="text-gradient-words">pitch generation</span>, 
+                <span class="text-gradient-words">mock interviews</span>, and 
+                <span class="text-gradient-words">business development</span>
+              </p>
+            </div>
+
+            <!-- Feature Pills -->
+            <div class="feature-pills mt-12 flex flex-wrap justify-center gap-4 text-reveal">
+              <div class="feature-pill card-reveal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span>AI-Powered</span>
+              </div>
+              <div class="feature-pill card-reveal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Professional</span>
+              </div>
+              <div class="feature-pill card-reveal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Real-time</span>
+              </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="hero-actions mt-16 flex flex-col sm:flex-row justify-center gap-6 button-reveal">
+              <a href="#ai-tools" class="hero-btn primary">
+                <span class="btn-content">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                  </svg>
+                  Explore AI Tools
+                </span>
+              </a>
+              <a href="#about" class="hero-btn secondary">
+                <span class="btn-content">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  Learn More
+                </span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Scroll Indicator -->
+          <div class="scroll-indicator text-reveal">
+            <div class="scroll-arrow">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+      <!-- AI TOOLS SECTION -->
+      <section id="ai-tools" class="py-20 section-reveal">
+        <div class="text-center mb-16 text-reveal">
+          <h2 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
+            Professional AI Tools
+          </h2>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Comprehensive suite of AI-powered tools designed for modern professionals and entrepreneurs
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Pitch Generator Tool -->
+          <div class="tool-card group card-reveal">
+            <div class="tool-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Pitch Generator</h3>
+            <p class="text-gray-300 mb-4">Transform your ideas into compelling pitches with AI-powered content generation and structure optimization.</p>
+            <a href="pitch-generator.html" class="tool-link">Get Started →</a>
+          </div>
+
+          <!-- Mock Interview Tool -->
+          <div class="tool-card group card-reveal">
+            <div class="tool-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Mock Interview</h3>
+            <p class="text-gray-300 mb-4">Practice with AI-powered interview simulations tailored to your industry and experience level.</p>
+            <a href="mock-interview.html" class="tool-link">Start Practice →</a>
+          </div>
+
+          <!-- Business Analysis Tool -->
+          <div class="tool-card group card-reveal">
+            <div class="tool-icon">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Business Analysis</h3>
+            <p class="text-gray-300 mb-4">Analyze market opportunities, competitive landscapes, and business viability with AI insights.</p>
+            <a href="#" class="tool-link">Coming Soon →</a>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ABOUT -->
+      <section id="about" class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
+            About IdeaForge
+          </h2>
+          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            We're revolutionizing how professionals and entrepreneurs develop their ideas and communication skills through cutting-edge AI technology.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Innovation</h3>
+            <p class="text-gray-300">Cutting-edge AI technology that transforms ideas into compelling presentations and professional communications.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Professional Growth</h3>
+            <p class="text-gray-300">Empowering professionals and entrepreneurs with tools for effective communication and career advancement.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Excellence</h3>
+            <p class="text-gray-300">Delivering high-quality, professional-grade tools that meet the standards of modern business environments.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- PROFESSIONAL FOOTER -->
+    <footer class="bg-gray-950 border-t border-gray-800 footer-reveal">
+      <div class="max-w-7xl mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Company Info -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-lg">IF</span>
+              </div>
+              <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">IdeaForge</span>
+            </div>
+            <p class="text-gray-300 mb-6 max-w-md">
+              Professional AI-powered platform for pitch generation, mock interviews, and business development. 
+              Transform your ideas into reality with cutting-edge technology.
+            </p>
+            <div class="flex gap-4">
+              <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+            <ul class="space-y-3">
+              <li><a href="#ai-tools" class="text-gray-300 hover:text-white transition-colors">AI Tools</a></li>
+              <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+            </ul>
+          </div>
+          
+          <!-- Support -->
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Support</h3>
+            <ul class="space-y-3">
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-400 text-sm">
+            © 2024 IdeaForge. All rights reserved. Built with modern web technologies.
+          </p>
+          <div class="flex items-center gap-4 mt-4 md:mt-0">
+            <span class="text-gray-400 text-sm">Powered by</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">AI</span>
+              <span class="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">TailwindCSS</span>
+              <span class="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300">JavaScript</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+      <div class="bg-gray-800 p-8 rounded-2xl w-full max-w-md mx-4">
+        <h2 class="text-2xl font-bold text-indigo-300 mb-6">Login</h2>
+        <form id="loginForm">
+          <div class="mb-4">
+            <label class="block text-gray-300 text-sm mb-2">Email</label>
+            <input type="email" id="loginEmail" required class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm mb-2">Password</label>
+            <input type="password" id="loginPassword" required class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="flex gap-3">
+            <button type="submit" class="flex-1 px-4 py-3 bg-indigo-600 rounded-lg font-bold hover:bg-indigo-700 transition">Login</button>
+            <button type="button" id="closeLoginModal" class="px-4 py-3 bg-gray-600 rounded-lg hover:bg-gray-700 transition">Cancel</button>
+          </div>
+        </form>
+        <div id="loginError" class="mt-4 text-red-400 text-sm hidden"></div>
+      </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+      <div class="bg-gray-800 p-8 rounded-2xl w-full max-w-md mx-4">
+        <h2 class="text-2xl font-bold text-indigo-300 mb-6">Register</h2>
+        <form id="registerForm">
+          <div class="mb-4">
+            <label class="block text-gray-300 text-sm mb-2">Name</label>
+            <input type="text" id="registerName" required class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-300 text-sm mb-2">Email</label>
+            <input type="email" id="registerEmail" required class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-300 text-sm mb-2">Password</label>
+            <input type="password" id="registerPassword" required class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="flex gap-3">
+            <button type="submit" class="flex-1 px-4 py-3 bg-indigo-600 rounded-lg font-bold hover:bg-indigo-700 transition">Register</button>
+            <button type="button" id="closeRegisterModal" class="px-4 py-3 bg-gray-600 rounded-lg hover:bg-gray-700 transition">Cancel</button>
+          </div>
+        </form>
+        <div id="registerError" class="mt-4 text-red-400 text-sm hidden"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize intro sequence
+        initializeIntroSequence();
+        
+        const video = document.getElementById("introvideo");
+        const pageLoader = document.getElementById("pageLoader");
+        const main = document.getElementById("main");
+        
+        if (video && pageLoader && main) {
+          // Hide main content initially
+          main.style.display = "none";
+          
+          // Skip button functionality
+          const skipButton = document.getElementById('skipVideo');
+          if (skipButton) {
+            skipButton.addEventListener('click', function() {
+              console.log('Skip button clicked');
+              pageLoader.style.opacity = "0";
+              pageLoader.style.transition = "opacity 0.5s ease";
+              
+              setTimeout(() => {
+                pageLoader.style.display = "none";
+                // Show gate animation even when skipping
+                showGateAnimation();
+              }, 500);
+            });
+          }
+          
+          video.onended = function() {
+            console.log('Video ended, showing gate animation');
+            // Hide video loader
+            pageLoader.style.opacity = "0";
+            pageLoader.style.transition = "opacity 1s ease";
+            
+            setTimeout(() => {
+              pageLoader.style.display = "none";
+              // Show gate animation
+              showGateAnimation();
+            }, 1000);
+          };
+          
+          // Handle video errors
+          video.onerror = function() {
+            console.log('Video failed to load, showing gate animation');
+            pageLoader.style.display = "none";
+            showGateAnimation();
+          };
+          
+          // Handle video load issues
+          video.oncanplaythrough = function() {
+            console.log('Video loaded successfully');
+          };
+          
+          // Fallback: if video doesn't load or fails, show gate after 5 seconds
+          setTimeout(() => {
+            if (pageLoader.style.display !== "none") {
+              pageLoader.style.display = "none";
+              showGateAnimation();
+            }
+          }, 5000);
+        }
+      });
+      
+      // Gate Animation Function
+      function showGateAnimation() {
+        const gateContainer = document.getElementById('gateContainer');
+        const main = document.getElementById('main');
+        
+        if (!gateContainer) return;
+        
+        // Show gate with black background
+        gateContainer.classList.remove('hidden');
+        gateContainer.classList.add('show');
+        
+        // Start lightning effects
+        setTimeout(() => {
+          const lightningBolts = gateContainer.querySelectorAll('.lightning-bolt');
+          lightningBolts.forEach((bolt, index) => {
+            setTimeout(() => {
+              bolt.style.opacity = '1';
+            }, index * 200);
+          });
+        }, 1000);
+        
+        // Start gate opening sequence with tearing effect
+        setTimeout(() => {
+          gateContainer.classList.add('opening');
+          
+          // Add text explosion effect
+          const mainText = gateContainer.querySelector('.gate-text-main');
+          if (mainText) {
+            setTimeout(() => {
+              mainText.classList.add('exploding');
+            }, 1000);
+          }
+          
+          // Add dramatic tearing effect
+          const tearLeft = gateContainer.querySelector('.tear-left');
+          const tearRight = gateContainer.querySelector('.tear-right');
+          
+          if (tearLeft && tearRight) {
+            tearLeft.style.animation = 'webpageTear 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+            tearRight.style.animation = 'webpageTearRight 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+          }
+          
+          // After gate opens, show main content
+          setTimeout(() => {
+            gateContainer.style.opacity = "0";
+            gateContainer.style.transition = "opacity 1.5s ease";
+            
+            setTimeout(() => {
+              gateContainer.style.display = "none";
+              main.style.display = "block";
+              main.style.opacity = "0";
+              main.style.transition = "opacity 1s ease";
+              
+              // Trigger entrance animations
+              setTimeout(() => {
+                main.style.opacity = "1";
+                document.body.classList.remove('loading');
+                triggerPageEntrance();
+              }, 100);
+            }, 1500);
+          }, 5000); // Gate opens after 5 seconds
+        }, 3000); // Start opening after 3 seconds
+      }
+      
+      // Intro Sequence Functions
+      function initializeIntroSequence() {
+        const introSequence = document.getElementById('introSequence');
+        const videoContainer = document.getElementById('videoContainer');
+        const fangsOverlay = document.getElementById('fangsOverlay');
+        const destructionContainer = document.getElementById('destructionContainer');
+        const introVideo = document.getElementById('introVideo');
+        const skipIntro = document.getElementById('skipIntro');
+        const main = document.getElementById('main');
+        
+        if (!introSequence) return;
+        
+        // Prevent scroll during intro
+        document.body.classList.add('intro-active');
+        
+        // Skip button functionality
+        if (skipIntro) {
+          skipIntro.addEventListener('click', () => {
+            showMainContent();
+          });
+        }
+        
+        // Video end handler
+        if (introVideo) {
+          introVideo.addEventListener('ended', () => {
+            showFangsText();
+          });
+          
+          // Error handling
+          introVideo.addEventListener('error', () => {
+            console.log('Video failed to load, showing Fangs text');
+            showFangsText();
+          });
+        }
+        
+        // Show Fangs text with animation
+        function showFangsText() {
+          if (fangsOverlay) {
+            fangsOverlay.classList.remove('hidden');
+            fangsOverlay.classList.add('intro-fade-in');
+            
+            const fangsText = document.getElementById('fangsText');
+            if (fangsText) {
+              fangsText.classList.add('fangs-glow', 'fangs-scale');
+            }
+            
+            // Start destruction after 3 seconds
+            setTimeout(() => {
+              startDestruction();
+            }, 3000);
+          }
+        }
+        
+        // Start destruction animation
+        function startDestruction() {
+          if (destructionContainer) {
+            destructionContainer.classList.remove('hidden');
+            
+            // Add shatter effect to Fangs text
+            const fangsText = document.getElementById('fangsText');
+            if (fangsText) {
+              fangsText.classList.add('destruction-shatter');
+            }
+            
+            // Create particles
+            createParticles();
+            
+            // Show main content after destruction
+            setTimeout(() => {
+              showMainContent();
+            }, 2000);
+          }
+        }
+        
+        // Create particle effects
+        function createParticles() {
+          const particlesContainer = document.getElementById('particlesContainer');
+          if (!particlesContainer) return;
+          
+          for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            
+            // Random size
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            // Random delay
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            particlesContainer.appendChild(particle);
+          }
+        }
+        
+        // Show main content
+        function showMainContent() {
+          // Remove intro sequence
+          if (introSequence) {
+            introSequence.style.opacity = '0';
+            introSequence.style.transition = 'opacity 1s ease';
+            
+            setTimeout(() => {
+              introSequence.style.display = 'none';
+              document.body.classList.remove('intro-active');
+              
+              // Show main content
+              if (main) {
+                main.style.display = 'block';
+                main.style.opacity = '0';
+                main.style.transition = 'opacity 1s ease';
+                
+                setTimeout(() => {
+                  main.style.opacity = '1';
+                  document.body.classList.remove('loading');
+                  triggerPageEntrance();
+                }, 100);
+              }
+            }, 1000);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

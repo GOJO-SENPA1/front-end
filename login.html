@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login — IdeaForge</title>
+    <meta name="description" content="Login to IdeaForge and access your AI-powered tools." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-gradient-to-b from-gray-950 to-gray-900 text-white antialiased">
+    <!-- Page Load Animation -->
+    <div id="pageLoader" class="page-loader">
+      <div class="loader-content">
+        <div class="logo-loader">
+          <div class="logo-icon-loader">
+            <span class="logo-text-loader">IF</span>
+          </div>
+          <span class="logo-text-main-loader">IdeaForge</span>
+        </div>
+        <div class="loader-progress">
+          <div class="progress-bar"></div>
+        </div>
+        <p class="loader-text">Loading login...</p>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 navbar-container">
+      <div class="navbar-glass">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
+          
+          <!-- Logo Section -->
+          <a href="index.html" class="flex items-center gap-3 group logo-container">
+            <div class="logo-icon">
+              <div class="logo-inner">
+                <span class="logo-text">IF</span>
+                <div class="logo-glow"></div>
+              </div>
+            </div>
+            <span class="logo-text-main">IdeaForge</span>
+            <div class="logo-underline"></div>
+          </a>
+
+          <!-- Navigation -->
+          <nav class="hidden md:flex items-center gap-1">
+            <a href="index.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              </svg>
+              <span class="nav-text">Home</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="ai-tools.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <span class="nav-text">AI Tools</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="pitch-generator.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span class="nav-text">Pitch Generator</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="mock-interview.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+              <span class="nav-text">Mock Interview</span>
+              <div class="nav-indicator"></div>
+            </a>
+          </nav>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-2">
+            <!-- Theme Selector Dropdown -->
+            <div class="theme-selector-container">
+              <button id="themeSelector" class="theme-selector" title="Select theme">
+                <svg class="theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                </svg>
+                <span class="theme-name">Dark</span>
+                <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="theme-dropdown" id="themeDropdown">
+                <div class="theme-option" data-theme="dark">
+                  <div class="theme-preview dark-preview"></div>
+                  <span>Dark</span>
+                </div>
+                <div class="theme-option" data-theme="light">
+                  <div class="theme-preview light-preview"></div>
+                  <span>Light</span>
+                </div>
+                <div class="theme-option" data-theme="vscode">
+                  <div class="theme-preview vscode-preview"></div>
+                  <span>VSCode</span>
+                </div>
+                <div class="theme-option" data-theme="jellyfish">
+                  <div class="theme-preview jellyfish-preview"></div>
+                  <span>Jellyfish</span>
+                </div>
+                <div class="theme-option" data-theme="neon">
+                  <div class="theme-preview neon-preview"></div>
+                  <span>Neon</span>
+                </div>
+                <div class="theme-option" data-theme="sunset">
+                  <div class="theme-preview sunset-preview"></div>
+                  <span>Sunset</span>
+                </div>
+                <div class="theme-option" data-theme="ocean">
+                  <div class="theme-preview ocean-preview"></div>
+                  <span>Ocean</span>
+                </div>
+                <div class="theme-option" data-theme="professional">
+                  <div class="theme-preview professional-preview"></div>
+                  <span>Professional</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications -->
+            <button class="notification-btn" title="Notifications">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.5 19.5L9 15H4l5 5-4.5-4.5z"></path>
+              </svg>
+              <span class="notification-badge">3</span>
+            </button>
+
+            <!-- User Profile Dropdown -->
+            <div class="relative" id="userDropdown">
+              <button class="profile-btn" id="profileToggle">
+                <div class="profile-avatar">
+                  <span class="profile-initial">U</span>
+                </div>
+                <svg class="profile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="profile-dropdown" id="profileMenu">
+                <div class="profile-header">
+                  <div class="profile-info">
+                    <div class="profile-name">User Name</div>
+                    <div class="profile-email">user@example.com</div>
+                  </div>
+                </div>
+                <div class="profile-divider"></div>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">👤</span>
+                  <span>Profile</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">⚙️</span>
+                  <span>Settings</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">📊</span>
+                  <span>Analytics</span>
+                </a>
+                <div class="profile-divider"></div>
+                <button id="logoutBtn" class="profile-item logout-item hidden">
+                  <span class="profile-item-icon">🚪</span>
+                  <span>Logout</span>
+                </button>
+                <button id="loginBtn" class="profile-item login-item">
+                  <span class="profile-item-icon">🔑</span>
+                  <span>Login</span>
+                </button>
+                <button id="registerBtn" class="profile-item register-item">
+                  <span class="profile-item-icon">📝</span>
+                  <span>Register</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="min-h-screen flex items-center justify-center px-4 py-20">
+      <div class="max-w-md w-full">
+        <!-- Login Card -->
+        <div class="glass p-8 rounded-2xl shadow-xl">
+          <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                <span class="text-white font-bold text-xl">IF</span>
+              </div>
+              <span class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">IdeaForge</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-gray-300">Sign in to access your AI-powered tools</p>
+          </div>
+
+          <form class="space-y-6" id="loginForm">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+              <input type="email" id="email" name="email" required 
+                     class="w-full p-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                     placeholder="Enter your email">
+            </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+              <div class="relative">
+                <input type="password" id="password" name="password" required 
+                       class="w-full p-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 pr-12"
+                       placeholder="Enter your password">
+                <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <label class="flex items-center">
+                <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500">
+                <span class="ml-2 text-sm text-gray-300">Remember me</span>
+              </label>
+              <a href="#" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              Sign In
+            </button>
+          </form>
+
+          <div class="mt-6 text-center">
+            <p class="text-gray-300">
+              Don't have an account? 
+              <a href="register.html" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Sign up here</a>
+            </p>
+          </div>
+
+          <div class="mt-6">
+            <div class="relative">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-700"></div>
+              </div>
+              <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-gray-900 text-gray-400">Or continue with</span>
+              </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 gap-3">
+              <button class="w-full inline-flex justify-center py-3 px-4 border border-gray-700 rounded-xl bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <span class="ml-2">Google</span>
+              </button>
+              <button class="w-full inline-flex justify-center py-3 px-4 border border-gray-700 rounded-xl bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                </svg>
+                <span class="ml-2">Twitter</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mock Interview — IdeaForge AI</title>
+    <meta name="description" content="Practice with AI-powered interview simulations tailored to your industry and experience level." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+      
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      
+      .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .chat-container {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        height: 500px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      }
+      
+      .chat-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      .chat-container::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      .chat-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+      }
+      
+      .message {
+        margin-bottom: 16px;
+        animation: fadeInUp 0.3s ease-out;
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .ai-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .user-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: row-reverse;
+      }
+      
+      .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      
+      .ai-avatar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      
+      .user-avatar {
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      }
+      
+      .message-content {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 12px 16px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
+      
+      .ai-message .message-content {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      
+      .user-message .message-content {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        margin-left: 52px;
+      }
+      
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: typing 1.4s infinite ease-in-out;
+      }
+      
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      
+      @keyframes typing {
+        0%, 60%, 100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        30% {
+          transform: translateY(-10px);
+          opacity: 1;
+        }
+      }
+      
+      .send-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: all 0.3s ease;
+      }
+      
+      .send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+      }
+      
+      .send-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      
+      .interview-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+      
+      .interview-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+      
+      .start-interview-btn {
+        background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        transition: all 0.3s ease;
+      }
+      
+      .start-interview-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+      }
+      
+      .interview-stats {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen text-white">
+    <!-- Navigation -->
+    <nav class="glass-card sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <a href="index.html" class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">IF</span>
+            </div>
+            <span class="text-2xl font-bold">IdeaForge</span>
+          </a>
+          
+          <div class="flex items-center gap-4">
+            <a href="index.html" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors">
+              Home
+            </a>
+            <a href="pitch-generator.html" class="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors">
+              Pitch Generator
+            </a>
+            <a href="login.html" class="px-4 py-2 bg-white bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-colors">
+              Login
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          AI Mock Interview
+        </h1>
+        <p class="text-xl text-white text-opacity-80 max-w-3xl mx-auto">
+          Practice with AI-powered interview simulations tailored to your industry and experience level
+        </p>
+      </div>
+
+      <!-- Interview Setup -->
+      <div id="setupSection" class="max-w-4xl mx-auto mb-8">
+        <div class="interview-card rounded-2xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold">Interview Setup</h2>
+          </div>
+
+          <form id="interviewSetupForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="positionSelect" class="block text-sm font-medium mb-3">Position/Role</label>
+                <select 
+                  id="positionSelect" 
+                  class="w-full p-4 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                >
+                  <option value="">Select Position</option>
+                  <option value="software-engineer">Software Engineer</option>
+                  <option value="product-manager">Product Manager</option>
+                  <option value="data-scientist">Data Scientist</option>
+                  <option value="marketing-manager">Marketing Manager</option>
+                  <option value="sales-manager">Sales Manager</option>
+                  <option value="business-analyst">Business Analyst</option>
+                  <option value="project-manager">Project Manager</option>
+                  <option value="designer">Designer</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="experienceSelect" class="block text-sm font-medium mb-3">Experience Level</label>
+                <select 
+                  id="experienceSelect" 
+                  class="w-full p-4 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                >
+                  <option value="">Select Experience</option>
+                  <option value="entry">Entry Level (0-2 years)</option>
+                  <option value="mid">Mid Level (3-5 years)</option>
+                  <option value="senior">Senior Level (6-10 years)</option>
+                  <option value="lead">Lead/Principal (10+ years)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="companyTypeSelect" class="block text-sm font-medium mb-3">Company Type</label>
+              <select 
+                id="companyTypeSelect" 
+                class="w-full p-4 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              >
+                <option value="">Select Company Type</option>
+                <option value="startup">Startup</option>
+                <option value="tech-giant">Tech Giant</option>
+                <option value="enterprise">Enterprise</option>
+                <option value="consulting">Consulting</option>
+                <option value="finance">Finance</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="interviewTypeSelect" class="block text-sm font-medium mb-3">Interview Type</label>
+              <select 
+                id="interviewTypeSelect" 
+                class="w-full p-4 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              >
+                <option value="">Select Interview Type</option>
+                <option value="technical">Technical Interview</option>
+                <option value="behavioral">Behavioral Interview</option>
+                <option value="case-study">Case Study Interview</option>
+                <option value="system-design">System Design Interview</option>
+                <option value="leadership">Leadership Interview</option>
+                <option value="mixed">Mixed Interview</option>
+              </select>
+            </div>
+
+            <button 
+              type="submit" 
+              id="startInterviewBtn" 
+              class="w-full px-8 py-4 start-interview-btn rounded-xl font-bold text-white flex items-center justify-center gap-3 hover:shadow-lg transition-all duration-300"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m-6-8h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2v-8a2 2 0 012-2z"></path>
+              </svg>
+              Start Mock Interview
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Interview Section -->
+      <div id="interviewSection" class="max-w-4xl mx-auto hidden">
+        <div class="interview-card rounded-2xl p-8">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold">Mock Interview</h2>
+                <p id="interviewInfo" class="text-white text-opacity-70"></p>
+              </div>
+            </div>
+            <button 
+              id="endInterviewBtn" 
+              class="px-4 py-2 bg-red-500 bg-opacity-20 rounded-lg hover:bg-opacity-30 transition-colors text-red-200"
+            >
+              End Interview
+            </button>
+          </div>
+
+          <!-- Chat Container -->
+          <div id="chatContainer" class="chat-container p-6 mb-6">
+            <div id="chatMessages" class="space-y-4">
+              <!-- Messages will be added here -->
+            </div>
+            <div id="typingIndicator" class="typing-indicator hidden">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <span class="text-white text-opacity-70 text-sm">AI is thinking...</span>
+            </div>
+          </div>
+
+          <!-- Input Form -->
+          <form id="chatForm" class="flex gap-3">
+            <input 
+              id="userInput" 
+              type="text" 
+              placeholder="Type your response here..." 
+              class="flex-1 p-4 rounded-xl bg-white bg-opacity-10 border border-white border-opacity-20 text-white placeholder-white placeholder-opacity-60 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:border-transparent transition-all duration-300"
+              required
+            />
+            <button 
+              type="submit" 
+              id="sendBtn" 
+              class="px-6 py-4 send-btn rounded-xl font-bold text-white flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+              </svg>
+              Send
+            </button>
+          </form>
+
+          <!-- Interview Stats -->
+          <div id="interviewStats" class="interview-stats hidden">
+            <div class="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div class="text-2xl font-bold text-white">0</div>
+                <div class="text-sm text-white text-opacity-70">Questions Asked</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-white">0</div>
+                <div class="text-sm text-white text-opacity-70">Your Responses</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-white">0</div>
+                <div class="text-sm text-white text-opacity-70">Minutes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        <div class="interview-card rounded-xl p-6 text-center">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">AI-Powered</h3>
+          <p class="text-white text-opacity-70">Advanced AI technology provides realistic interview simulations with intelligent follow-up questions.</p>
+        </div>
+        
+        <div class="interview-card rounded-xl p-6 text-center">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Personalized</h3>
+          <p class="text-white text-opacity-70">Tailored questions based on your role, experience level, and company type.</p>
+        </div>
+        
+        <div class="interview-card rounded-xl p-6 text-center">
+          <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold mb-2">Real-time Feedback</h3>
+          <p class="text-white text-opacity-70">Get instant feedback and suggestions to improve your interview performance.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card mt-16">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center">
+          <p class="text-white text-opacity-70">
+            © 2024 IdeaForge. All rights reserved. Built with modern web technologies.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const setupForm = document.getElementById('interviewSetupForm');
+        const setupSection = document.getElementById('setupSection');
+        const interviewSection = document.getElementById('interviewSection');
+        const chatContainer = document.getElementById('chatContainer');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const endInterviewBtn = document.getElementById('endInterviewBtn');
+        const interviewStats = document.getElementById('interviewStats');
+        const interviewInfo = document.getElementById('interviewInfo');
+
+        let interviewData = {};
+        let questionCount = 0;
+        let responseCount = 0;
+        let startTime = null;
+
+        // Start interview
+        setupForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const position = document.getElementById('positionSelect').value;
+          const experience = document.getElementById('experienceSelect').value;
+          const companyType = document.getElementById('companyTypeSelect').value;
+          const interviewType = document.getElementById('interviewTypeSelect').value;
+          
+          if (!position || !experience || !companyType || !interviewType) {
+            alert('Please fill in all fields to start the interview');
+            return;
+          }
+
+          interviewData = { position, experience, companyType, interviewType };
+          startTime = new Date();
+          
+          // Hide setup, show interview
+          setupSection.classList.add('hidden');
+          interviewSection.classList.remove('hidden');
+          interviewStats.classList.remove('hidden');
+          
+          // Update interview info
+          interviewInfo.textContent = `${position} • ${experience} • ${companyType} • ${interviewType}`;
+          
+          // Start with welcome message
+          addMessage('ai', getWelcomeMessage());
+          
+          // Auto-scroll to bottom
+          setTimeout(() => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 100);
+        });
+
+        // Send message
+        chatForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const message = userInput.value.trim();
+          if (!message) return;
+
+          // Add user message
+          addMessage('user', message);
+          responseCount++;
+          updateStats();
+          
+          // Clear input and disable send button
+          userInput.value = '';
+          sendBtn.disabled = true;
+          
+          // Show typing indicator
+          typingIndicator.classList.remove('hidden');
+          
+          // Simulate AI thinking
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          // Hide typing indicator
+          typingIndicator.classList.add('hidden');
+          
+          // Generate AI response
+          const aiResponse = generateAIResponse(message);
+          addMessage('ai', aiResponse);
+          questionCount++;
+          updateStats();
+          
+          // Re-enable send button
+          sendBtn.disabled = false;
+          userInput.focus();
+        });
+
+        // End interview
+        endInterviewBtn.addEventListener('click', function() {
+          if (confirm('Are you sure you want to end the interview?')) {
+            // Reset to setup
+            setupSection.classList.remove('hidden');
+            interviewSection.classList.add('hidden');
+            interviewStats.classList.add('hidden');
+            
+            // Clear chat
+            chatMessages.innerHTML = '';
+            questionCount = 0;
+            responseCount = 0;
+            startTime = null;
+          }
+        });
+
+        // Add message to chat
+        function addMessage(type, content) {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `message ${type}-message`;
+          
+          const avatar = document.createElement('div');
+          avatar.className = `message-avatar ${type}-avatar`;
+          avatar.innerHTML = type === 'ai' ? '🤖' : '👤';
+          
+          const messageContent = document.createElement('div');
+          messageContent.className = 'message-content';
+          messageContent.textContent = content;
+          
+          messageDiv.appendChild(avatar);
+          messageDiv.appendChild(messageContent);
+          
+          chatMessages.appendChild(messageDiv);
+          
+          // Auto-scroll to bottom
+          setTimeout(() => {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 100);
+        }
+
+        // Update interview stats
+        function updateStats() {
+          const stats = interviewStats.querySelectorAll('.text-2xl');
+          stats[0].textContent = questionCount;
+          stats[1].textContent = responseCount;
+          
+          if (startTime) {
+            const elapsed = Math.floor((new Date() - startTime) / 60000);
+            stats[2].textContent = elapsed;
+          }
+        }
+
+        // Generate welcome message
+        function getWelcomeMessage() {
+          const { position, experience, companyType, interviewType } = interviewData;
+          return `Welcome! I'm your AI interviewer for a ${position} position at a ${companyType} company. This is a ${interviewType} interview for ${experience} level candidates. Let's begin with a simple question: Can you tell me about yourself and why you're interested in this role?`;
+        }
+
+        // Generate AI response
+        function generateAIResponse(userMessage) {
+          const responses = [
+            "That's interesting. Can you tell me more about a specific challenge you faced in your previous role?",
+            "Great! Now, let's talk about your technical skills. How would you approach solving [technical problem]?",
+            "I see. What's your experience with [relevant technology/skill]?",
+            "That's a good point. Can you walk me through your thought process when making important decisions?",
+            "Interesting perspective. How do you handle working under pressure?",
+            "Good answer. Now, if you had to choose between two equally qualified candidates, what would be your decision criteria?",
+            "That's helpful. Can you give me an example of a time when you had to learn something new quickly?",
+            "I understand. What questions do you have about our company and this role?",
+            "Excellent! How do you stay updated with the latest trends in your field?",
+            "That's impressive. Can you describe a situation where you had to work with a difficult team member?",
+            "Good insight. What's your approach to handling multiple projects simultaneously?",
+            "Interesting. How do you measure success in your work?",
+            "That's valuable experience. What motivates you most in your career?",
+            "Great perspective. How do you handle feedback and criticism?",
+            "That's a solid approach. What are your long-term career goals?"
+          ];
+          
+          return responses[Math.floor(Math.random() * responses.length)];
+        }
+      });
+    </script>
+  </body>
+</html>

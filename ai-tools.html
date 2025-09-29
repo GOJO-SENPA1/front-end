@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AI Tools — IdeaForge</title>
+    <meta name="description" content="Explore our comprehensive suite of AI-powered tools for pitch generation, mock interviews, and business development." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-gradient-to-b from-gray-950 to-gray-900 text-white antialiased">
+    <!-- Page Load Animation -->
+    <div id="pageLoader" class="page-loader">
+      <div class="loader-content">
+        <div class="logo-loader">
+          <div class="logo-icon-loader">
+            <span class="logo-text-loader">IF</span>
+          </div>
+          <span class="logo-text-main-loader">IdeaForge</span>
+        </div>
+        <div class="loader-progress">
+          <div class="progress-bar"></div>
+        </div>
+        <p class="loader-text">Loading AI tools...</p>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 navbar-container">
+      <div class="navbar-glass">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
+          
+          <!-- Logo Section -->
+          <a href="index.html" class="flex items-center gap-3 group logo-container">
+            <div class="logo-icon">
+              <div class="logo-inner">
+                <span class="logo-text">IF</span>
+                <div class="logo-glow"></div>
+              </div>
+            </div>
+            <span class="logo-text-main">IdeaForge</span>
+            <div class="logo-underline"></div>
+          </a>
+
+          <!-- Navigation -->
+          <nav class="hidden md:flex items-center gap-1">
+            <a href="index.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              </svg>
+              <span class="nav-text">Home</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="ai-tools.html" class="nav-link group active">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <span class="nav-text">AI Tools</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="pitch-generator.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span class="nav-text">Pitch Generator</span>
+              <div class="nav-indicator"></div>
+            </a>
+            <a href="mock-interview.html" class="nav-link group">
+              <svg class="nav-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+              <span class="nav-text">Mock Interview</span>
+              <div class="nav-indicator"></div>
+            </a>
+          </nav>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-2">
+            <!-- Theme Selector Dropdown -->
+            <div class="theme-selector-container">
+              <button id="themeSelector" class="theme-selector" title="Select theme">
+                <svg class="theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                </svg>
+                <span class="theme-name">Dark</span>
+                <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="theme-dropdown" id="themeDropdown">
+                <div class="theme-option" data-theme="dark">
+                  <div class="theme-preview dark-preview"></div>
+                  <span>Dark</span>
+                </div>
+                <div class="theme-option" data-theme="light">
+                  <div class="theme-preview light-preview"></div>
+                  <span>Light</span>
+                </div>
+                <div class="theme-option" data-theme="vscode">
+                  <div class="theme-preview vscode-preview"></div>
+                  <span>VSCode</span>
+                </div>
+                <div class="theme-option" data-theme="jellyfish">
+                  <div class="theme-preview jellyfish-preview"></div>
+                  <span>Jellyfish</span>
+                </div>
+                <div class="theme-option" data-theme="neon">
+                  <div class="theme-preview neon-preview"></div>
+                  <span>Neon</span>
+                </div>
+                <div class="theme-option" data-theme="sunset">
+                  <div class="theme-preview sunset-preview"></div>
+                  <span>Sunset</span>
+                </div>
+                <div class="theme-option" data-theme="ocean">
+                  <div class="theme-preview ocean-preview"></div>
+                  <span>Ocean</span>
+                </div>
+                <div class="theme-option" data-theme="professional">
+                  <div class="theme-preview professional-preview"></div>
+                  <span>Professional</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications -->
+            <button class="notification-btn" title="Notifications">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.5 19.5L9 15H4l5 5-4.5-4.5z"></path>
+              </svg>
+              <span class="notification-badge">3</span>
+            </button>
+
+            <!-- User Profile Dropdown -->
+            <div class="relative" id="userDropdown">
+              <button class="profile-btn" id="profileToggle">
+                <div class="profile-avatar">
+                  <span class="profile-initial">U</span>
+                </div>
+                <svg class="profile-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="profile-dropdown" id="profileMenu">
+                <div class="profile-header">
+                  <div class="profile-info">
+                    <div class="profile-name">User Name</div>
+                    <div class="profile-email">user@example.com</div>
+                  </div>
+                </div>
+                <div class="profile-divider"></div>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">👤</span>
+                  <span>Profile</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">⚙️</span>
+                  <span>Settings</span>
+                </a>
+                <a href="#" class="profile-item">
+                  <span class="profile-item-icon">📊</span>
+                  <span>Analytics</span>
+                </a>
+                <div class="profile-divider"></div>
+                <button id="logoutBtn" class="profile-item logout-item hidden">
+                  <span class="profile-item-icon">🚪</span>
+                  <span>Logout</span>
+                </button>
+                <button id="loginBtn" class="profile-item login-item">
+                  <span class="profile-item-icon">🔑</span>
+                  <span>Login</span>
+                </button>
+                <button id="registerBtn" class="profile-item register-item">
+                  <span class="profile-item-icon">📝</span>
+                  <span>Register</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 py-20">
+      <!-- Hero Section -->
+      <section class="text-center mb-20">
+        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-gradient mb-6">
+          AI Tools Suite
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          Discover our comprehensive collection of AI-powered tools designed to transform your ideas into reality
+        </p>
+      </section>
+
+      <!-- AI Tools Grid -->
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Pitch Generator Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Pitch Generator</h3>
+          <p class="text-gray-300 mb-4">Transform your ideas into compelling pitches with AI-powered content generation and structure optimization.</p>
+          <a href="pitch-generator.html" class="tool-link">Get Started →</a>
+        </div>
+
+        <!-- Mock Interview Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Mock Interview</h3>
+          <p class="text-gray-300 mb-4">Practice with AI-powered interview simulations tailored to your industry and experience level.</p>
+          <a href="mock-interview.html" class="tool-link">Start Practice →</a>
+        </div>
+
+        <!-- Business Analysis Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Business Analysis</h3>
+          <p class="text-gray-300 mb-4">Analyze market opportunities, competitive landscapes, and business viability with AI insights.</p>
+          <a href="#" class="tool-link">Coming Soon →</a>
+        </div>
+
+        <!-- Content Creator Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Content Creator</h3>
+          <p class="text-gray-300 mb-4">Generate engaging content for blogs, social media, and marketing materials with AI assistance.</p>
+          <a href="#" class="tool-link">Coming Soon →</a>
+        </div>
+
+        <!-- Data Visualizer Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Data Visualizer</h3>
+          <p class="text-gray-300 mb-4">Transform complex data into beautiful, interactive visualizations and charts.</p>
+          <a href="#" class="tool-link">Coming Soon →</a>
+        </div>
+
+        <!-- Code Generator Tool -->
+        <div class="tool-card group">
+          <div class="tool-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Code Generator</h3>
+          <p class="text-gray-300 mb-4">Generate clean, efficient code snippets and functions for various programming languages.</p>
+          <a href="#" class="tool-link">Coming Soon →</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-950 border-t border-gray-800 mt-20">
+      <div class="max-w-7xl mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Company Info -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-lg">IF</span>
+              </div>
+              <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">IdeaForge</span>
+            </div>
+            <p class="text-gray-300 mb-6 max-w-md">
+              Professional AI-powered platform for pitch generation, mock interviews, and business development. 
+              Transform your ideas into reality with cutting-edge technology.
+            </p>
+          </div>
+          
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+            <ul class="space-y-3">
+              <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+              <li><a href="ai-tools.html" class="text-gray-300 hover:text-white transition-colors">AI Tools</a></li>
+              <li><a href="pitch-generator.html" class="text-gray-300 hover:text-white transition-colors">Pitch Generator</a></li>
+              <li><a href="mock-interview.html" class="text-gray-300 hover:text-white transition-colors">Mock Interview</a></li>
+            </ul>
+          </div>
+          
+          <!-- Support -->
+          <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Support</h3>
+            <ul class="space-y-3">
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+          <p class="text-gray-400 text-sm">
+            © 2024 IdeaForge. All rights reserved. Built with modern web technologies.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
